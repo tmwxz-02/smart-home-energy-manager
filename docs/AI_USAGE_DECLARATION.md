@@ -1,0 +1,16 @@
+# AI Usage Declaration
+
+Form from the AIF1303 syllabus (§8 AI Use Policy and Appendix "AI Use Declaration Form").
+
+| Field | Content |
+|---|---|
+| **Assignment** | Final Project, Topic 12 "Mini Smart Home Energy Saver" → *Smart Home Energy Manager*. Course AIF1303 AI Fundamentals. Stream 1, Group 3. Students: Tuleu Tamerlan, Esen Nuradil. |
+| **AI tool** | Claude (Anthropic), Claude Opus family models, used through the Claude Code desktop application (agent mode with access to the project folder). Dates of use: 10 November 2026 (prototype), 12 November 2026 (improved version), 23 November 2026 (review against the grading criteria, Topic 12 walkthrough, notebook, report, slides, demo video). |
+| **Purpose of use** | Code generation and refactoring (Python backend, JavaScript frontend), writing unit tests, checking the work against the syllabus and the final-project criteria, drafting documentation (README, technical report, slides, defense script), producing the captioned demo video from screenshots of the running app. |
+| **Key prompts** | "Build a Topic 12 smart-home energy saver with hill climbing, Bayes and an MDP, Python backend + web frontend"; "turn the prototype into a working application with rooms, devices, readings, SQLite, CSV import, history and analytics, honest about limitations"; "check my work against all criteria of AI Fundamentals — can it count as a project or is it still a demo"; "improve the project so it meets every requirement for 100 points; ask questions when needed". |
+| **AI contribution** | The AI generated most of the source code (backend/, frontend/, tests/), the Topic 12 walkthrough module and page, the Jupyter notebook, the README, the technical report, the slide deck, the defense script and the demo video. The students chose the topic, defined the requirements and the scope, made the design decisions put to them (team roles, English for submitted documents, GitHub publishing, video format), reviewed the outputs and asked for corrections. |
+| **Result verification** | (1) Ran the full automated test suite: `python -m unittest -v` → 64 tests OK. (2) Recomputed the key numbers by hand: Bayes posterior 0.075 / 0.275 = 0.273 and 0.675 / 0.725 = 0.931; prediction 0.273 × 0.85 + 0.727 × 0.10 = 0.305; energy per interval 0.048 kW × 0.25 h × 25 = 0.300 KZT; break-even 0.300 / 0.750 = 0.40; schedule 4 cost 4 × 0.3 + 0.85 × 0.75 + 0.3 = 2.1375. (3) Walked through every page of the app (desktop and 375 px phone width), entered valid and invalid data, imported both sample CSV files, restarted the server and checked that data persisted. (4) Read the algorithm code (`backend/algorithms/`, `backend/brief.py`) and are able to explain each line during the defense. |
+| **Data and privacy** | No personal or confidential data was given to the AI service. All data in the project is synthetic (seeded demo) or entered by the user locally; occupancy history never leaves the local SQLite file. |
+| **Student statement** | We confirm that we are responsible for the final work, that we can explain the submitted code and results, and that we have accurately disclosed AI use. — Tuleu Tamerlan, Esen Nuradil |
+
+> Students: read every row before submitting and correct anything that does not match what you actually did (for example, dates, the exact prompts you used, or how you verified the results).
