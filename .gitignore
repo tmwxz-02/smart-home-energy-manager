@@ -1,0 +1,10 @@
+# local data and build output
+data/
+dist/
+__pycache__/
+*.pyc
+# local tool settings with machine-specific paths
+.claude/
+# course materials (syllabus PDF) and the old prototype archives stay local
+/*.pdf
+/*.zip

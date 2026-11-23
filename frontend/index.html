@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Home Energy Manager</title>
+  <meta name="description" content="Local app for managing virtual home devices, estimating energy use and inspecting AI decisions.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23256b4c'/%3E%3Cpath d='M18 4 8 18h7l-2 10 11-15h-7z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <button class="icon-button nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <a class="brand" href="#/dashboard">
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect width="32" height="32" rx="7" fill="var(--accent)"/><path d="M18 4 8 18h7l-2 10 11-15h-7z" fill="#fff"/></svg>
+      <span>Smart Home Energy Manager</span>
+    </a>
+    <div class="workspace" role="group" aria-label="Workspace">
+      <button type="button" data-ws="home" aria-pressed="true">My home</button>
+      <button type="button" data-ws="demo" aria-pressed="false">Demo</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Main">
+      <a href="#/dashboard" data-route="dashboard">Dashboard</a>
+      <a href="#/home" data-route="home">Rooms &amp; devices</a>
+      <a href="#/readings" data-route="readings">Readings</a>
+      <a href="#/decisions" data-route="decisions">AI decisions</a>
+      <a href="#/optimizer" data-route="optimizer">Schedule optimizer</a>
+      <a href="#/analytics" data-route="analytics">Analytics</a>
+      <a href="#/settings" data-route="settings">Settings</a>
+      <a href="#/methods" data-route="methods">How the AI works</a>
+      <a href="#/brief" data-route="brief">Topic 12 walkthrough</a>
+      <p class="sidebar-note">AIF1303 final project · all devices are virtual</p>
+    </nav>
+
+    <main id="main" tabindex="-1">
+      <div id="banners"></div>
+      <div id="view" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="assertive"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

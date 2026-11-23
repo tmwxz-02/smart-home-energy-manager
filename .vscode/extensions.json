@@ -1,0 +1,7 @@
+{
+  // VS Code suggests installing these when the folder is opened.
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.debugpy"
+  ]
+}

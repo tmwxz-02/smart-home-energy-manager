@@ -1,0 +1,8 @@
+timestamp,room,motion,occupied
+2026-11-11 08:00,Living room,1,1
+2026-11-11 08:07,Living room,0,0
+2026-11-11 08:15,Kitchen,1,
+11/11/2026 08:30,Living room,1,1
+2026-11-11 08:45,Living room,maybe,1
+2026-11-11 09:00,Bedroom,0,2
+2026-11-11 08:00,Living room,0,0

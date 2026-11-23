@@ -1,0 +1,28 @@
+{
+  // Terminal > Run Task... (works without the Python extension).
+  // "Run tests" is the default test task: Ctrl+Shift+P > "Tasks: Run Test Task".
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start website",
+      "type": "shell",
+      "command": "python app.py",
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "Run console version",
+      "type": "shell",
+      "command": "python main.py",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run tests",
+      "type": "shell",
+      "command": "python -m unittest -v",
+      "problemMatcher": [],
+      "group": { "kind": "test", "isDefault": true }
+    }
+  ]
+}
