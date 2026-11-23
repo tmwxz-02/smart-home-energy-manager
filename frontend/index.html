@@ -5,10 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Smart Home Energy Manager</title>
   <meta name="description" content="Local app for managing virtual home devices, estimating energy use and inspecting AI decisions.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23256b4c'/%3E%3Cpath d='M18 4 8 18h7l-2 10 11-15h-7z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23121315'/%3E%3Cpath d='M18 4 8 18h7l-2 10 11-15h-7z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg-layer bg-blobs"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+    <div class="bg-layer bg-grid"></div>
+    <div class="bg-layer bg-field"><canvas id="field"></canvas></div>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
   <a class="skip" href="#main">Skip to content</a>
   <header class="topbar">
     <button class="icon-button nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
@@ -19,6 +28,7 @@
       <span>Smart Home Energy Manager</span>
     </a>
     <div class="workspace" role="group" aria-label="Workspace">
+      <span class="thumb" aria-hidden="true"></span>
       <button type="button" data-ws="home" aria-pressed="true">My home</button>
       <button type="button" data-ws="demo" aria-pressed="false">Demo</button>
     </div>
@@ -26,6 +36,7 @@
 
   <div class="layout">
     <nav class="sidebar" id="sidebar" aria-label="Main">
+      <span class="nav-pill" aria-hidden="true"></span>
       <a href="#/dashboard" data-route="dashboard">Dashboard</a>
       <a href="#/home" data-route="home">Rooms &amp; devices</a>
       <a href="#/readings" data-route="readings">Readings</a>

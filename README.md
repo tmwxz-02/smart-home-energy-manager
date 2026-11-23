@@ -60,6 +60,7 @@ A local application for managing **virtual** home devices, estimating their ener
 | 6 | Decision history: time, device, reading, prior → posterior → predicted occupancy, Q-values, action, schedule action, explanation | *AI decisions* |
 | 7 | Analytics for a chosen period: estimated kWh, cost at a configurable tariff, AI vs schedule, saving or overspend, per device/day/hour, comfort (only with labels), strategy replay on identical readings, CSV export | *Analytics* |
 | 8 | Responsive interface (phone to desktop), navigation, forms with validation, SVG charts, loading, empty and error states | all pages |
+| + | Motion design: the background (dot grid, soft blobs, particle network) moves opposite to the mouse; smooth page transitions, sliding menu and workspace indicators, animated buttons, cards, charts and toasts; static for users who ask the OS for reduced motion | all pages, `frontend/js/motion.js` |
 | + | Hill-climbing schedule optimizer with exact optimum for comparison; interactive Bayes + MDP calculator; console fallback | *Schedule optimizer*, *How the AI works*, `python main.py` |
 | + | **Topic 12 walkthrough**: the brief's exact setup (one fan, 5 schedules, 2 states), input → calculation → output → explanation for each method, editable inputs, three-strategy result | *Topic 12 walkthrough*, `backend/brief.py`, notebook |
 
@@ -67,7 +68,7 @@ A local application for managing **virtual** home devices, estimating their ener
 
 ## 3. Running the project (Windows)
 
-Requirements: **Python 3.10 or newer**. No packages, no internet, no paid services.
+Requirements: **Python 3.10 or newer**. No packages, no paid services. The interface loads three web fonts from Google Fonts when online; offline it falls back to system fonts and works the same.
 
 1. Double-click **`start.bat`**. It finds Python, starts the server and opens `http://127.0.0.1:8000/`.
 2. Keep the black window open while using the app. Close it (or press Ctrl+C) to stop.

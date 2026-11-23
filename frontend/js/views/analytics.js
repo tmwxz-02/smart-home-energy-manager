@@ -48,14 +48,14 @@ export async function render(root, ctx) {
   root.append(h("section", { class: "card" }, h("h2", {}, "Estimated energy per day"),
     barChart({ labels, unit: "kWh", ariaLabel: "Energy per day, AI vs schedule",
       series: [{ name: "AI", cls: "s-ai", values: data.daily.map((d) => d.ai_kwh) }, { name: "Schedule only", cls: "s-base", values: data.daily.map((d) => d.base_kwh) }] }),
-    legend([["AI (stored decisions)", "var(--accent)"], ["Schedule only", "var(--base)"]])));
+    legend([["AI (stored decisions)", "var(--on)"], ["Schedule only", "var(--base)"]])));
 
   // Hourly chart
   const hours = Array.from({ length: 24 }, (_, hour) => data.hourly.find((x) => x.hour === hour) || { hour, ai_kwh: 0, base_kwh: 0 });
   root.append(h("section", { class: "card" }, h("h2", {}, "Estimated energy by hour of day (whole period)"),
     barChart({ labels: hours.map((x) => String(x.hour)), unit: "kWh", labelEvery: 2, height: 190, ariaLabel: "Energy by hour",
       series: [{ name: "AI", cls: "s-ai", values: hours.map((x) => x.ai_kwh) }, { name: "Schedule only", cls: "s-base", values: hours.map((x) => x.base_kwh) }] }),
-    legend([["AI", "var(--accent)"], ["Schedule only", "var(--base)"]])));
+    legend([["AI", "var(--on)"], ["Schedule only", "var(--base)"]])));
 
   // Comfort
   const comfort = h("section", { class: "card" }, h("h2", {}, "Comfort trade-off"));

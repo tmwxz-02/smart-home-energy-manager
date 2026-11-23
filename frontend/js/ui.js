@@ -95,7 +95,11 @@ export function toast(message, kind = "info") {
   const box = document.getElementById("toasts");
   const item = h("div", { class: `toast ${kind === "error" ? "error" : ""}` }, message);
   box.append(item);
-  setTimeout(() => item.remove(), kind === "error" ? 6000 : 3500);
+  setTimeout(() => {
+    item.classList.add("out");
+    item.addEventListener("animationend", () => item.remove(), { once: true });
+    setTimeout(() => item.remove(), 600);
+  }, kind === "error" ? 6000 : 3500);
 }
 
 export function tag(text, kind = "") {

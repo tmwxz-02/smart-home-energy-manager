@@ -2,6 +2,7 @@
 // Every number shown comes from the Python backend; the browser only displays it.
 import { api, getWorkspace, hasStoredWorkspace, setWorkspace } from "./api.js";
 import { clear, errorBox, h, loading } from "./ui.js";
+import { moveNavPill, moveWorkspaceThumb, prefersReducedMotion, stagger } from "./motion.js";
 import * as dashboard from "./views/dashboard.js";
 import * as home from "./views/home.js";
 import * as readings from "./views/readings.js";
@@ -66,7 +67,18 @@ function syncWorkspaceButtons() {
   for (const button of document.querySelectorAll(".workspace button")) {
     button.setAttribute("aria-pressed", String(button.dataset.ws === getWorkspace()));
   }
+  moveWorkspaceThumb();
 }
+
+// Smoothly fade the current page out before the next one is drawn.
+async function leaveCurrentPage() {
+  if (prefersReducedMotion || !view.firstElementChild || view.querySelector(".loading")) return;
+  view.classList.add("leaving");
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  view.classList.remove("leaving");
+}
+
+let lastPageKey = null;
 
 async function render() {
   const id = ++renderId;
@@ -76,14 +88,25 @@ async function render() {
     if (link.dataset.route === name) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
   }
+  moveNavPill();
   closeNav();
+  // Page-change animations only when the user moves to another page (or workspace),
+  // not when the same page redraws itself after a save.
+  const pageKey = `${getWorkspace()}:${name}`;
+  const newPage = pageKey !== lastPageKey;
+  lastPageKey = pageKey;
+  if (newPage) await leaveCurrentPage();
+  if (id !== renderId) return;
+  view.classList.toggle("enter", newPage);
   clear(view).append(loading());
   try {
     if (!ctx.meta || ctx.meta.workspace !== getWorkspace()) await ctx.refreshMeta();
     const container = h("div", { class: "stack" });
     await ROUTES[name].render(container, { ...ctx, params, isCurrent: () => id === renderId });
     if (id !== renderId) return;
+    stagger(container);
     clear(view).append(container);
+    if (newPage) window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
   } catch (error) {
     if (id !== renderId) return;
     clear(view).append(errorBox(error, "This page could not be loaded."),
