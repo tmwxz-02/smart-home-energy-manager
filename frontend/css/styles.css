@@ -3,10 +3,10 @@
 :root {
   --bg: #d9dadd;
   --bg-deep: #cfd0d4;
-  --surface: rgba(232, 233, 236, 0.82);
+  --surface: rgba(231, 232, 235, 0.94);
   --surface-solid: #e6e7ea;
   --surface-2: rgba(219, 220, 224, 0.9);
-  --glass: rgba(229, 230, 233, 0.72);
+  --glass: rgba(226, 227, 230, 0.95);
   --text: #0b0b0c;
   --muted: #565a60;
   --border: #c3c5ca;
@@ -34,8 +34,6 @@
   --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --t-fast: 0.25s;
   --t: 0.45s;
-  --px: 0;   /* pointer position, -1 … 1, set by motion.js */
-  --py: 0;
   color-scheme: light;
 }
 
@@ -65,21 +63,16 @@ a:hover { opacity: 0.7; }
 
 /* ---------------------------------------------------------------- moving background */
 .bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.bg-layer { position: absolute; inset: -90px; will-change: transform; }
-.bg-blobs { transform: translate3d(calc(var(--px) * -26px), calc(var(--py) * -26px), 0); }
+.bg-layer { position: absolute; inset: -90px; will-change: transform; transform: translate3d(0, 0, 0); }
 .bg-grid {
-  transform: translate3d(calc(var(--px) * -48px), calc(var(--py) * -48px), 0);
-  background-image: radial-gradient(rgba(11, 11, 12, 0.16) 1px, transparent 1.4px);
+  background-image: radial-gradient(rgba(11, 11, 12, 0.13) 1px, transparent 1.4px);
   background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 78%);
-  mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 78%);
 }
-.bg-field { transform: translate3d(calc(var(--px) * -70px), calc(var(--py) * -70px), 0); }
 .bg-field canvas { width: 100%; height: 100%; display: block; }
-.blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.55; animation: drift 22s ease-in-out infinite alternate; }
-.blob.b1 { width: 46vw; height: 46vw; left: -6vw; top: -10vw; background: #c4c6cb; }
-.blob.b2 { width: 38vw; height: 38vw; right: -8vw; top: 18vh; background: #b9cfc3; animation-duration: 28s; animation-delay: -6s; }
-.blob.b3 { width: 34vw; height: 34vw; left: 30vw; bottom: -14vw; background: #c9c3b6; animation-duration: 32s; animation-delay: -12s; }
+.blob { position: absolute; border-radius: 50%; opacity: 0.75; will-change: transform; animation: drift 22s ease-in-out infinite alternate; }
+.blob.b1 { width: 46vw; height: 46vw; left: -6vw; top: -10vw; background: radial-gradient(closest-side, #c2c4c9, transparent); }
+.blob.b2 { width: 38vw; height: 38vw; right: -8vw; top: 18vh; background: radial-gradient(closest-side, #b6ccc0, transparent); animation-duration: 28s; animation-delay: -6s; }
+.blob.b3 { width: 34vw; height: 34vw; left: 30vw; bottom: -14vw; background: radial-gradient(closest-side, #c8c1b3, transparent); animation-duration: 32s; animation-delay: -12s; }
 @keyframes drift {
   0% { transform: translate3d(0, 0, 0) scale(1); }
   50% { transform: translate3d(4vw, 3vh, 0) scale(1.08); }
@@ -93,7 +86,6 @@ a:hover { opacity: 0.7; }
   display: flex; align-items: center; gap: 12px;
   height: 60px; padding: 0 18px;
   background: var(--glass); border-bottom: 1px solid rgba(11, 11, 12, 0.08);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2);
 }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 0.98rem; letter-spacing: -0.02em; min-width: 0; }
 .brand:hover { opacity: 1; }
@@ -112,7 +104,6 @@ a:hover { opacity: 0.7; }
   position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto;
   width: 236px; flex-shrink: 0; padding: 18px 12px;
   border-right: 1px solid rgba(11, 11, 12, 0.08); background: var(--glass);
-  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
   display: flex; flex-direction: column; gap: 2px;
 }
 .nav-pill { position: absolute; left: 12px; right: 12px; top: 0; height: 0; border-radius: 10px; background: var(--text); box-shadow: 0 10px 24px -14px rgba(11, 11, 12, 0.8); transition: transform var(--t) var(--ease), height var(--t) var(--ease), opacity var(--t-fast) var(--ease); opacity: 0; z-index: 0; pointer-events: none; }
@@ -142,10 +133,10 @@ main:focus { outline: none; }
 }
 
 /* ---------------------------------------------------------------- page transitions */
-#view.enter > .stack > * { animation: rise 0.7s var(--ease) both; animation-delay: calc(min(var(--i, 0), 8) * 0.06s); }
-#view.leaving > * { animation: leave 0.22s var(--ease) both; }
-@keyframes rise { from { opacity: 0; transform: translate3d(0, 18px, 0); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
-@keyframes leave { to { opacity: 0; transform: translate3d(0, -10px, 0); filter: blur(4px); } }
+#view.enter > .stack > * { animation: rise 0.6s var(--ease) both; animation-delay: calc(min(var(--i, 0), 8) * 0.06s); }
+#view.leaving > * { animation: leave 0.18s var(--ease) both; }
+@keyframes rise { from { opacity: 0; transform: translate3d(0, 16px, 0); } to { opacity: 1; transform: none; } }
+@keyframes leave { to { opacity: 0; transform: translate3d(0, -8px, 0); } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes pop { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: none; } }
 
@@ -157,7 +148,6 @@ main:focus { outline: none; }
 .card {
   background: var(--surface); border: 1px solid rgba(11, 11, 12, 0.09); border-radius: var(--radius);
   padding: 18px; box-shadow: var(--shadow); min-width: 0;
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   transition: box-shadow var(--t) var(--ease), transform var(--t) var(--ease), border-color var(--t) var(--ease);
 }
 .card:hover { box-shadow: var(--shadow-lift); border-color: rgba(11, 11, 12, 0.16); }
@@ -168,7 +158,7 @@ main:focus { outline: none; }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .spacer { flex: 1; }
 
-.banner { border-radius: var(--radius); padding: 11px 15px; margin-bottom: 12px; font-size: 0.9rem; border: 1px solid; animation: rise 0.6s var(--ease) both; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.banner { border-radius: var(--radius); padding: 11px 15px; margin-bottom: 12px; font-size: 0.9rem; border: 1px solid; animation: rise 0.6s var(--ease) both;}
 .banner strong { font-weight: 700; }
 .banner.virtual { background: rgba(229, 230, 233, 0.7); border-color: rgba(11, 11, 12, 0.12); color: var(--text); }
 .banner.demo { background: var(--warn-tint); border-color: rgba(138, 90, 0, 0.3); color: var(--text); }
@@ -179,8 +169,7 @@ main:focus { outline: none; }
 .kpi {
   position: relative; overflow: hidden;
   background: var(--surface); border: 1px solid rgba(11, 11, 12, 0.09); border-radius: var(--radius); padding: 14px 16px;
-  box-shadow: var(--shadow); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
+  box-shadow: var(--shadow);  transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
   animation: pop 0.7s var(--spring) both; animation-delay: calc(0.08s + var(--k, 0) * 0.07s);
 }
 .kpi:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
@@ -318,7 +307,7 @@ tr.detail:not([hidden]) td > * { animation: rise 0.45s var(--ease) both; }
 .chart { width: 100%; height: auto; display: block; }
 .chart text { font: 10px var(--mono); fill: var(--muted); }
 .chart .grid { stroke: rgba(11, 11, 12, 0.12); stroke-width: 1; }
-.chart rect { transform-box: fill-box; transform-origin: 50% 100%; animation: grow 0.8s var(--ease) both; }
+.chart { animation: rise 0.7s var(--ease) 0.1s both; }
 .chart .s-ai { fill: var(--on); }
 .chart .s-base { fill: var(--base); }
 .chart .s-learned { fill: var(--info); }
@@ -326,7 +315,6 @@ tr.detail:not([hidden]) td > * { animation: rise 0.45s var(--ease) both; }
 .chart .ref { stroke: var(--warn); stroke-width: 1.5; stroke-dasharray: 4 3; }
 .chart .line { fill: none; stroke: var(--on); stroke-width: 2; stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: draw 1.4s var(--ease) 0.2s forwards; }
 .chart .dot { fill: var(--on); animation: pop 0.5s var(--spring) 0.6s both; }
-@keyframes grow { from { transform: scaleY(0); } }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }

@@ -6,7 +6,6 @@
 // Users who ask the OS for reduced motion get a static background.
 
 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const root = document.documentElement;
 
 // ---------------------------------------------------------------- parallax
 let targetX = 0, targetY = 0, curX = 0, curY = 0;
@@ -33,7 +32,7 @@ function size() {
   W = box.width; H = box.height;
   canvas.width = W * dpr; canvas.height = H * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const count = Math.min(85, Math.floor((W * H) / 18000));
+  const count = Math.min(60, Math.floor((W * H) / 24000));
   particles = Array.from({ length: count }, () => ({
     x: Math.random() * W, y: Math.random() * H,
     vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
@@ -41,40 +40,67 @@ function size() {
   }));
 }
 
+// Links are drawn in a few batches (one path per opacity band) instead of one
+// stroke per pair: a handful of draw calls per frame instead of hundreds.
+const LINK = 120, LINK2 = LINK * LINK, BANDS = 4;
+const bands = Array.from({ length: BANDS }, () => []);
+
 function drawField() {
   ctx.clearRect(0, 0, W, H);
   // pointer position in canvas space (the canvas is offset by 90 px and by its own parallax shift)
-  const shift = 70;
-  const px = mouseX + 90 + curX * shift;
-  const py = mouseY + 90 + curY * shift;
+  const px = mouseX + 90 + curX * DEPTH.field;
+  const py = mouseY + 90 + curY * DEPTH.field;
+  ctx.fillStyle = "rgba(11, 11, 12, 0.32)";
+  ctx.beginPath();
   for (const p of particles) {
-    const dx = px - p.x, dy = py - p.y, d = Math.hypot(dx, dy) || 1;
-    if (d < 170) { p.vx += (dx / d) * 0.01; p.vy += (dy / d) * 0.01; }
+    const dx = px - p.x, dy = py - p.y, d2 = dx * dx + dy * dy;
+    if (d2 < 28900) { const d = Math.sqrt(d2) || 1; p.vx += (dx / d) * 0.01; p.vy += (dy / d) * 0.01; }
     p.vx *= 0.985; p.vy *= 0.985;
     p.x += p.vx; p.y += p.vy;
     if (p.x < 0 || p.x > W) p.vx *= -1;
     if (p.y < 0 || p.y > H) p.vy *= -1;
-    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7);
-    ctx.fillStyle = "rgba(11, 11, 12, 0.32)"; ctx.fill();
+    ctx.moveTo(p.x + p.r, p.y);
+    ctx.arc(p.x, p.y, p.r, 0, 6.2832);
   }
+  ctx.fill();
+  for (const band of bands) band.length = 0;
   for (let i = 0; i < particles.length; i += 1) {
+    const a = particles[i];
     for (let j = i + 1; j < particles.length; j += 1) {
-      const a = particles[i], b = particles[j];
-      const d = Math.hypot(a.x - b.x, a.y - b.y);
-      if (d < 120) {
-        ctx.strokeStyle = `rgba(11, 11, 12, ${0.13 * (1 - d / 120)})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-      }
+      const b = particles[j];
+      const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+      if (d2 < LINK2) bands[Math.min(BANDS - 1, Math.floor((d2 / LINK2) * BANDS))].push(a.x, a.y, b.x, b.y);
     }
   }
+  ctx.lineWidth = 1;
+  bands.forEach((band, k) => {
+    if (!band.length) return;
+    ctx.strokeStyle = `rgba(11, 11, 12, ${(0.13 * (1 - (k + 0.5) / BANDS)).toFixed(3)})`;
+    ctx.beginPath();
+    for (let n = 0; n < band.length; n += 4) { ctx.moveTo(band[n], band[n + 1]); ctx.lineTo(band[n + 2], band[n + 3]); }
+    ctx.stroke();
+  });
 }
 
+// Each background layer moves opposite to the pointer with its own depth.
+// Transforms are written straight onto the layers (GPU-composited); nothing
+// on the page itself is restyled, so the content never has to be recalculated.
+const DEPTH = { blobs: 26, grid: 48, field: 70 };
+const layers = {
+  blobs: document.querySelector(".bg-blobs"),
+  grid: document.querySelector(".bg-grid"),
+  field: document.querySelector(".bg-field"),
+};
+
 function tick() {
-  curX += (targetX - curX) * 0.06;
-  curY += (targetY - curY) * 0.06;
-  root.style.setProperty("--px", curX.toFixed(4));
-  root.style.setProperty("--py", curY.toFixed(4));
+  const dx = targetX - curX, dy = targetY - curY;
+  if (Math.abs(dx) > 0.0005 || Math.abs(dy) > 0.0005) {
+    curX += dx * 0.07;
+    curY += dy * 0.07;
+    for (const [name, el] of Object.entries(layers)) {
+      if (el) el.style.transform = `translate3d(${(-curX * DEPTH[name]).toFixed(2)}px, ${(-curY * DEPTH[name]).toFixed(2)}px, 0)`;
+    }
+  }
   if (ctx && !document.hidden) drawField();
   requestAnimationFrame(tick);
 }
